@@ -1,20 +1,22 @@
+%seeder
 rng('shuffle');
 
+%data
 samples = csvread('iris.csv');
 
+%parameter
 n_cluster = 3;
 init_tao = 0.01;
-rho = 0.01;
+rho = 0.5;
 ant_quantity = 50;
-max_cycle = 1000;
-p1s = 0.01;
+max_cycle = 2500;
+pls = 0.01;
 q = 0.98;
 best_quantity = round(ant_quantity * 20/100);
 
-%inisialisasi tao
-tao = zeros(size(samples,1), n_cluster);
-tao(tao==0) = init_tao;
 
+%inisialisasi tao
+tao = ones(size(samples,1), n_cluster) * init_tao;
 
 ants(ant_quantity,1) = Ant(samples);
 for i = 1 : length(ants)
@@ -44,12 +46,12 @@ while cycle <= max_cycle
     best_ant_idx = find(ismember(fitnesses, best_fitnesses))';
     
     for i = best_ant_idx
-        fitnesses(i) = ants(i).localSearch(p1s, n_cluster);
+        fitnesses(i) = ants(i).localSearch(pls, n_cluster);
     end
     
-    tao = (1 - rho) * tao;
+%     tao = (1 - rho) * tao;
     for i = best_ant_idx
-        tao = ants(i).globalUpdatePheromones(tao, fitnesses(i) );
+        tao = ants(i).globalUpdatePheromones(tao, rho, fitnesses(i) );
     end
       
     best_fitness_ = min(fitnesses);

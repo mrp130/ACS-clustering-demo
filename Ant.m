@@ -24,10 +24,11 @@ classdef Ant < handle
             if qr <= q
                 max_prob =  max(probability);
                 max_prob = max_prob(1);
-                probabilities = probability(probability == max_prob);
-                selected = 1;
+                probabilities = find(probability == max_prob);
                 if length(probabilities) > 1
-                    selected = randi([1, length(probabilities)]);
+                    selected = probabilities( randi([1, length(probabilities)]) );
+                else
+                    selected = probabilities(1);
                 end
             else
                 %pemilihan sesuai probabilitas
@@ -76,12 +77,12 @@ classdef Ant < handle
             end
         end
                 
-        function tao = globalUpdatePheromones(obj, tao, fitness)
+        function tao = globalUpdatePheromones(obj, tao, rho, fitness)
             updateValue = 1 / fitness;
             
             for i = 1 : length(obj.Solution)
                j = obj.Solution(i);
-               tao(i,j) = tao(i,j) + updateValue;
+               tao(i,j) = (1-rho) * tao(i,j) + updateValue;
             end
         end
     end
