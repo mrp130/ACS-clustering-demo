@@ -2,14 +2,14 @@
 rng('shuffle');
 
 %data
-samples = csvread('iris.csv');
+samples = csvread('wine.csv');
 
 %parameter
 n_cluster = 3;
 init_tao = 0.01;
 rho = 0.5;
 ant_quantity = 50;
-max_cycle = 2500;
+max_cycle = 2000;
 pls = 0.01;
 q = 0.98;
 best_quantity = round(ant_quantity * 20/100);
